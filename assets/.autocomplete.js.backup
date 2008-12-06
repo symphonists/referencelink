@@ -1,0 +1,20 @@
+function replace() {
+  fo.el.value="Fill it in, dog!";
+} 
+
+
+function buildlist() {
+  var choices = new Array();
+  mycars[0] = "Saab";
+  mycars[1] = "Volvo";
+  mycars[2] = "BMW";
+
+for (i=0;i<choices.length;i++)
+{
+document.write(mycars[i] + "<br />");
+}
+
+document.myform.master.options[0]=new Option("Sports", "sportsvalue", true, false)
+document.myform.master.options[1]=new Option("Music", "musicvalue", false, false)
+document.myform.master.options[2]=new Option("Movies", "moviesvalue", false, false)
+}
