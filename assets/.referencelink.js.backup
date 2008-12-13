@@ -18,7 +18,7 @@ $(document).ready(function(){
     $(".replace").replaceWith("<input type='text' id='ac_search' value='" + namelist + "' /><a href='#' id='empty'>Clear Selections</a><input type='text' name='" + $(".replace").attr("name") + "' id='ac_value' value='" + idlist + "' />");
 
     $("#ac_search").autocomplete(acdata, {
-      multiple: ($(.replace[multiple = multiple]) ? true : false),
+      multiple: true,
       matchContains: true,
       formatItem: function(row, i, max) {
         return row.name;

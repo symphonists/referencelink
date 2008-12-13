@@ -15,7 +15,7 @@ $(document).ready(function(){
         idlist = ((idlist == "") ? $(this).val() : idlist + ", " + $(this).val());
     });
 
-    $(".replace").replaceWith("<input type='text' id='ac_search' value='" + namelist + "' /><a href='#' id='empty'>Clear Selections</a><input type='text' name='" + $(".replace").attr("name") + "' id='ac_value' value='" + idlist + "' />");
+    $(".replace").replaceWith("<input type='text' id='ac_search' value='" + namelist + "' /><a href='#' id='empty'>Clear Selections</a><input type='hidden' name='" + $(".replace").attr("name") + "' id='ac_value' value='" + idlist + "' />");
 
     $("#ac_search").autocomplete(acdata, {
       multiple: true,
