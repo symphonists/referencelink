@@ -7,9 +7,11 @@
 		function __construct(&$parent){
 			parent::__construct($parent);
 			$this->_name = 'Reference Link';
+      $this->_required = true;
 
     // Set default
     $this->set('show_column', 'no'); 
+    $this->set('required', 'yes');
 		}
 
     function canToggle(){
@@ -73,16 +75,19 @@
             $link = Widget::Anchor($primary_field['value'], URL . '/symphony/publish/'.$primary_field['section_handle'].'/edit/' . $entry_id . '/');
             $result[] = $link->generate();
           }
-        foreach($result as $value){ 
-          $output .= " " . $value; }
-        return $output;
+          foreach($result as $value){ 
+            $output .= " " . $value; }
+          return $output;
         }
         else {
-          if(!$data['relation_id'] || !$primary_field = $this->__findPrimaryFieldValueFromRelationID($data['relation_id'])) return parent::prepareTableValue(NULL);
+          if(!$data['relation_id'] || !$primary_field = $this->__findPrimaryFieldValueFromRelationID($data['relation_id'])) {
+            return parent::prepareTableValue(NULL);
+          }
           $entry_id = $data['relation_id'];
           $link = Widget::Anchor($primary_field['value'], URL . '/symphony/publish/'.$primary_field['section_handle'].'/edit/' . $entry_id . '/');
-          return $link->generate(); }
-        }
+          return $link->generate(); 
+         }
+       }
 		}
 
 		private function __findPrimaryFieldValueFromRelationID($id){
@@ -206,6 +211,8 @@
 
 			$states = $this->findOptions();
       $options = array();
+
+      if($this->get('required') != 'yes') $options[] = array(NULL, false, NULL);
 
         if(is_array($data['relation_id'])) {
           $entry_id = array();
@@ -352,6 +359,7 @@
 			$wrapper->appendChild($label);
 			
 			$this->appendShowColumnCheckbox($wrapper);
+      $this->appendRequiredCheckbox($wrapper);
 						
 		}
 

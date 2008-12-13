@@ -25,7 +25,7 @@
     public function initializeAdmin($context) {
       $page = $context['parent']->Page;
 
-      $page->addStylesheetToHead(URL . '/extensions/name/assets/autocomplete.css', 'screen', 100);
+      $page->addStylesheetToHead(URL . '/extensions/referencelink/assets/autocomplete.css', 'screen', 100);
       
       $context['parent']->Page->addScriptToHead(URL . '/extensions/referencelink/assets/jquery-1.2.6.min.js', 220);
 

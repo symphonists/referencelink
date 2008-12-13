@@ -7,24 +7,39 @@ $(document).ready(function(){
         acdata[i] = { name: $(this).text(), id: $(this).attr("value") };
     });
 
-    $(".replace").replaceWith("<input type='text' name='" + $(".replace").attr("name") + "' id='" + $(this).attr("id") + "' />");
-    $("#" + $(this).attr("id")).autocomplete(acdata, {
+    var namelist = "";
+    var idlist = "";
+
+    $(".replace option:selected").each(function(i) {
+        namelist = ((namelist == "") ? $(this).html() : namelist + ", " + $(this).html());
+        idlist = ((idlist == "") ? $(this).val() : idlist + ", " + $(this).val());
+    });
+
+    $(".replace").replaceWith("<input type='text' id='ac_search' value='" + namelist + "' /><a href='#' id='empty'>Clear Selections</a><input type='text' name='" + $(".replace").attr("name") + "' id='ac_value' value='" + idlist + "' />");
+
+    $("#ac_search").autocomplete(acdata, {
       multiple: true,
+      matchContains: true,
       formatItem: function(row, i, max) {
         return row.name;
       },
       formatMatch: function(row, i, max) {
         return row.name;
-      },
-      formatResult: function(row) {
-        return row.id;
-      } 
+      }
+    }).result(function(event, data, formatted) {
+      var value = $("#ac_value");
+      value.val( (value.val() ? value.val() + ", " : value.val()) + data.id);
+    });
+    
+
+    $("#empty").click(function() {
+      $("#ac_search").val("");
+      $("#ac_value").val("");
     });
 
   });
 
  });
-
 
 
 /*
