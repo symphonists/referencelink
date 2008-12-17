@@ -239,8 +239,11 @@
       if($this->get('allow_multiple_selection') == 'yes') $html_options['multiple'] = 'multiple';
       if($this->get('field_type') == 'autocomplete') $html_options['class'] = 'replace';
       $html_options['id'] = $fieldname;
+
+      $labeltext = $this->get('label');
+      if($this->get('field_type') == 'autocomplete') $labeltext .= " <em>(Enter text for suggestions)</em>";
 			
-			$label = Widget::Label($this->get('label'));
+			$label = Widget::Label($labeltext);
 			$label->appendChild(Widget::Select($fieldname, $options, $html_options));
 			
 			if($flagWithError != NULL) $wrapper->appendChild(Widget::wrapFormElementWithError($label, $flagWithError));
