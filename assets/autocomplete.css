@@ -13,7 +13,7 @@
   padding: 0;
   margin: 0;
   font-family: Lucida Grande,Leelawadee,Lucida Sans Unicode,sans-serif;
-  font-size: 1.05em;
+  font-size: 1em;
   color: #343434;
 }
 
@@ -22,8 +22,9 @@
   padding: 5px;
   cursor: default;
   display: block;
-  line-height: 2.25;
+  line-height: 2.15;
   overflow: hidden;
+  border-bottom: 1px solid #ddd;
 }
 
 .ac_loading {
@@ -35,6 +36,6 @@
 }
 
 .ac_over {
-  background-color: #7e7e70;
+  background-color: #5273C0;
   color: white;
 }
