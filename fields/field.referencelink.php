@@ -241,11 +241,14 @@
 		
 		public function checkPostFieldData($data, &$message, $entry_id=NULL){
 			$message = NULL;
-			if($this->get('required') == 'yes'){
-				if (strlen($data) == 0 || $data[0] == 'n') {
-					$message = 'This is a required field.';
-					return self::__MISSING_FIELDS__;
+			foreach($data as $selection) {
+				if($selection !== 'none' && strlen($selection) != 0) {
+					$selections[] = $selection;
 				}
+			}
+			if($this->get('required') == 'yes' && strlen($selections == 0)){
+				$message = 'This is a required field.';
+				return self::__MISSING_FIELDS__;
 			}
 						
 			return self::__OK__;		

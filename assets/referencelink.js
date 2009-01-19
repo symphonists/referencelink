@@ -5,10 +5,13 @@ $(".replace").each(function(n) {
 
 	var options = new Array();
 	$(this).children("option").each(function(i) {
-		if ($(this).val() != "none") {
-			options[i] = { name: $(this).text(), id: $(this).attr("value") };
-		}
+		options[i] = { name: $(this).text(), id: $(this).attr("value") };
 	});
+	for (x in options) {
+		if (options[x].id == "none") {
+			options.splice(x,1)
+		}
+	}
 
 	var selected = new Array();
 	$(this).children(":selected").each(function(i) {
