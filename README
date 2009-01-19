@@ -1,14 +1,21 @@
-**UNFINISHED** Reference Link Field
+Reference Link Field
 ------------------------------------
 
-Version: 0.01 alpha
-Author: craig zheng
-Build Date: 17th Dec 2008
+Version: 1.0
+Author: craig zheng (cz@mongrl.com)
+Build Date: 18th Jan 2009
 Requirements: Symphony 2
 
-** Please note that work on this extension is unfinished and it is NOT intended for public use.
+An alternative to (extension of) Symphony's Select Box Link Field. As of version 1.0, Reference Link adds the option to use an autocomplete input field to create relationships between entries.
 
-The goal of reference link is to be an alternative to, or extension of, Symphony's section_link_field. Currently planned features include:
+[INSTALLATION]
 
-1) Ability to link entries either via the standard select box or a JS-enabled autocomplete text input. (75% complete)
-2) Ability to link to entries from more than one "parent" section. (0% complete)
+1. Upload the 'referencelink' folder in this archive to your Symphony 'extensions' folder.
+
+2. Enable it by selecting the "Field: Reference Link ", choose Enable from the with-selected menu, then click Apply.
+
+3. You can now add the "Reference Link" field to your sections.
+
+[USAGE]
+
+- Works in a near identical way to the Select Box Link field, except you can choose whether to display the field as a select box or an autocomplete input.

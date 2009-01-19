@@ -1,46 +1,92 @@
 $(document).ready(function(){
-  
-  $(".replace").each(function(n) {
 
-    var acdata = new Array();
-    $(this).children("option").each(function(i) {
-        acdata[i] = { name: $(this).text(), id: $(this).attr("value") };
-    });
+$(".replace").each(function(n) {
+	var multiple = $(this).attr("multiple");
 
-    var namelist = "";
-    var idlist = "";
+	var options = new Array();
+	$(this).children("option").each(function(i) {
+		options[i] = { name: $(this).text(), id: $(this).attr("value") };
+	});
 
-    $(".replace option:selected").each(function(i) {
-        namelist = ((namelist == "") ? $(this).html() : namelist + ", " + $(this).html());
-        idlist = ((idlist == "") ? $(this).val() : idlist + ", " + $(this).val());
-    });
+	var selected = new Array();
+	$(this).children(":selected").each(function(i) {
+		if ($(this).val() != "none") {
+			if ($(this).html() != undefined && $(this).val() != "") {
+				selected[i] = { name: $(this).html(), id: $(this).val() };
+			}
+		}
+	});
+	
+	var inputHTML = "<em id='helptext'> (Type for suggestions)</em><input type='text' id='ac_search' />";
+	var submitHTML = "<input type='hidden' name='" + $(".replace").attr("name") + "' id='ac_value' value='" + getSelectedValues(selected) + "' />";
+	
+	$(".replace").after("<ul id='selections'></ul>");
+	if (selected.length > 0) {
+		buildSelectionList(selected);
+	}
 
-    $(".replace").replaceWith("<input type='text' id='ac_search' value='" + namelist + "' /><a href='#' id='empty'>Clear Selections</a><input type='hidden' name='" + $(".replace").attr("name") + "' id='ac_value' value='" + idlist + "' />");
+	$(".replace").replaceWith(inputHTML + submitHTML);
+	if (!multiple && selected.length > 0) {
+		$("#ac_search").hide();
+		$("#helptext").hide();
+	}
 
-    $("#ac_search").autocomplete(acdata, {
-      multiple: true,
-      matchContains: true,
-      formatItem: function(row, i, max) {
-        return row.name;
-      },
-      formatMatch: function(row, i, max) {
-        return row.name;
-      }
-    }).result(function(event, data, formatted) {
-      var value = $("#ac_value");
-      value.val( (value.val() ? value.val() + ", " : value.val()) + data.id);
-    });
-    
+	$("#ac_search").autocomplete(options, {
+	multiple: true,
+	matchContains: true,
+	formatItem: function(row, i, max) {
+		return row.name;
+	},
+	formatMatch: function(row, i, max) {
+		return row.name;
+	}
+	}).result(function(event, data, formatted) {
+	selected.push({name: data.name, id: data.id});
+	if (!multiple && selected.length > 0) {
+		$("#ac_search").hide();
+		$("#helptext").hide();
+	}
+	$("#ac_value").val(getSelectedValues(selected));
+	buildSelectionList(selected);
+	$("#ac_search").val("");
+	});
+	
+});
 
-    $("#empty").click(function() {
-      $("#ac_search").val("");
-      $("#ac_value").val("");
-    });
+});
 
-  });
-
- });
-
+	function getSelectedValues(sel) {
+		var values = "";
+		for (i in sel) {
+			if (sel[i].id != undefined) {
+				values += sel[i].id + ", ";						
+			}
+		}
+		return values;
+	}
+	
+	function buildSelectionList(sel) {
+		$("#selections").empty();
+		for (i in sel) {
+			if (sel[i].id != undefined) {
+				$("#selections").append("<li id='" + sel[i].id + "'><a href='#' id='" + sel[i].id + "' class='deselect' >Remove</a>" + sel[i].name  + "</li>")
+			}
+		}
+		if (sel.length == 0) {
+			$("#ac_search").show();
+			$("#helptext").show();
+		}
+		$("a.deselect").bind("click", sel, function(){
+			var did = $(this).attr("id");
+			for (x in sel) {
+				if (sel[x].id == did) {
+					sel.splice(x,1)
+				}
+			}
+			$("#ac_value").val(getSelectedValues(sel));
+			buildSelectionList(sel);
+		});
+	}
 
 /*
  * Autocomplete - jQuery plugin 1.0.2
