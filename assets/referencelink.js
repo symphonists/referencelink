@@ -5,7 +5,9 @@ $(".replace").each(function(n) {
 
 	var options = new Array();
 	$(this).children("option").each(function(i) {
-		options[i] = { name: $(this).text(), id: $(this).attr("value") };
+		if ($(this).val() != "none") {
+			options[i] = { name: $(this).text(), id: $(this).attr("value") };
+		}
 	});
 
 	var selected = new Array();
