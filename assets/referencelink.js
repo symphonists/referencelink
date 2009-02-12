@@ -4,7 +4,7 @@ $(".replace").each(function(n) {
 	var multiple = $(this).attr("multiple");
 
 	var options = new Array();
-	$(this).children("option").each(function(i) {
+	$(this).children("optgroup").children("option").each(function(i) {
 		options[i] = { name: $(this).text(), id: $(this).attr("value") };
 	});
 	for (x in options) {
@@ -14,7 +14,7 @@ $(".replace").each(function(n) {
 	}
 
 	var selected = new Array();
-	$(this).children(":selected").each(function(i) {
+	$(this).children("optgroup").children(":selected").each(function(i) {
 		if ($(this).val() != "none") {
 			if ($(this).html() != undefined && $(this).val() != "") {
 				selected[i] = { name: $(this).html(), id: $(this).val() };

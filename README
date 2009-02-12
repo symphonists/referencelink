@@ -1,12 +1,12 @@
 Reference Link Field
 ------------------------------------
 
-Version: 1.0
+Version: 1.1 beta
 Author: craig zheng (cz@mongrl.com)
-Build Date: 18th Jan 2009
-Requirements: Symphony 2
+Build Date: 11th Feb 2009
+Requirements: Symphony 2.0.1, Select Box Link 1.7
 
-An alternative to (extension of) Symphony's Select Box Link Field. As of version 1.0, Reference Link adds the option to use an autocomplete input field to create relationships between entries.
+An extension of Symphony's Select Box Link Field which adds the option to display the field as an autocomplete input field.
 
 [INSTALLATION]
 
