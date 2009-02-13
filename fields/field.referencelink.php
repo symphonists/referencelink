@@ -125,7 +125,7 @@
 			}
 			
 			else{
-				$entry_ids = array_keys($data['relation_id']);
+				$entry_ids = array_values($data['relation_id']);
 			}
 			
 			// build list of target entries
