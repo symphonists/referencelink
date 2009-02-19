@@ -1,42 +1,46 @@
 $(document).ready(function(){
 
-$(".replace").each(function(n) {
-	var multiple = $(this).attr("multiple");
-
 	var options = new Array();
+	var selected = new Array();
+	var multiple = new Array();
+
+$(".replace").each(function(n) {
+	multiple[n] = $(this).attr("multiple");
+
+	options[n] = new Array();
 	$(this).children("optgroup").children("option").each(function(i) {
-		options[i] = { name: $(this).text(), id: $(this).attr("value") };
+		options[n][i] = { name: $(this).text(), id: $(this).attr("value") };
 	});
-	for (x in options) {
-		if (options[x].id == "none") {
-			options.splice(x,1)
+	for (x in options[n]) {
+		if (options[n][x].id == "none") {
+			options[n].splice(x,1)
 		}
 	}
 
-	var selected = new Array();
+	selected[n] = new Array();
 	$(this).children("optgroup").children(":selected").each(function(i) {
 		if ($(this).val() != "none") {
 			if ($(this).html() != undefined && $(this).val() != "") {
-				selected[i] = { name: $(this).html(), id: $(this).val() };
+				selected[n][i] = { name: $(this).html(), id: $(this).val() };
 			}
 		}
 	});
 	
-	var inputHTML = "<em id='helptext'> (Type for suggestions)</em><input type='text' id='ac_search' />";
-	var submitHTML = "<input type='hidden' name='" + $(".replace").attr("name") + "' id='ac_value' value='" + getSelectedValues(selected) + "' />";
+	var inputHTML = "<em id='helptext'> (Type for suggestions)</em> n=" + n + "<input type='text' id='ac_search" + n + "' />";
+	var submitHTML = "<input type='hidden' name='" + $(".replace").attr("name") + "' id='ac_value" + 1 + "' value='" + getSelectedValues(selected[n]) + "' />";
 	
-	$(".replace").after("<ul id='selections'></ul>");
-	if (selected.length > 0) {
-		buildSelectionList(selected);
+	$(this).after("<ul id='selections" + n + "'></ul>");
+	if (selected[n].length > 0) {
+		buildSelectionList(selected[n]);
 	}
 
-	$(".replace").replaceWith(inputHTML + submitHTML);
-	if (!multiple && selected.length > 0) {
-		$("#ac_search").hide();
+	$(this).replaceWith(inputHTML + submitHTML);
+	if (!multiple[n] && selected[n].length > 0) {
+		$("#ac_search" + n).hide();
 		$("#helptext").hide();
 	}
 
-	$("#ac_search").autocomplete(options, {
+	$("#ac_search" + n).autocomplete(options[n], {
 	multiple: true,
 	matchContains: true,
 	formatItem: function(row, i, max) {
@@ -46,14 +50,14 @@ $(".replace").each(function(n) {
 		return row.name;
 	}
 	}).result(function(event, data, formatted) {
-	selected.push({name: data.name, id: data.id});
-	if (!multiple && selected.length > 0) {
-		$("#ac_search").hide();
+	selected[n].push({name: data.name, id: data.id});
+	if (!multiple[n] && selected[n].length > 0) {
+		$("#ac_search" + n).hide();
 		$("#helptext").hide();
 	}
-	$("#ac_value").val(getSelectedValues(selected));
-	buildSelectionList(selected);
-	$("#ac_search").val("");
+	$("#ac_value" + n).val(getSelectedValues(selected[n]));
+	buildSelectionList(selected[n]);
+	$("#ac_search" + n).val("");
 	});
 	
 });
@@ -71,14 +75,14 @@ $(".replace").each(function(n) {
 	}
 	
 	function buildSelectionList(sel) {
-		$("#selections").empty();
+		$("#selections" + n).empty();
 		for (i in sel) {
 			if (sel[i].id != undefined) {
-				$("#selections").append("<li id='" + sel[i].id + "'><a href='#' id='" + sel[i].id + "' class='deselect' >Remove</a>" + sel[i].name  + "</li>")
+				$("#selections" + n).append("<li id='" + sel[i].id + "'><a href='#' id='" + sel[i].id + "' class='deselect' >Remove</a>" + sel[i].name  + "</li>")
 			}
 		}
 		if (sel.length == 0) {
-			$("#ac_search").show();
+			$("#ac_search" + n).show();
 			$("#helptext").show();
 		}
 		$("a.deselect").bind("click", sel, function(){
@@ -88,7 +92,7 @@ $(".replace").each(function(n) {
 					sel.splice(x,1)
 				}
 			}
-			$("#ac_value").val(getSelectedValues(sel));
+			$("#ac_value" + n).val(getSelectedValues(sel));
 			buildSelectionList(sel);
 		});
 	}
