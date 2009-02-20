@@ -41,7 +41,7 @@
 		}
 		
 		public function update($previousVersion){	
-			if(version_compare($previousVersion, '1.1', '<')){
+			if(version_compare($previousVersion, '1.2', '<')){
 				$this->_Parent->Database->query("ALTER TABLE `tbl_fields_referencelink` ADD `limit` INT(4) UNSIGNED NOT NULL DEFAULT '20'");
 				$this->_Parent->Database->query("ALTER TABLE `tbl_fields_referencelink` CHANGE `related_field_id` `related_field_id` VARCHAR(255) NOT NULL");
 			}
@@ -54,7 +54,7 @@
 				"CREATE TABLE `tbl_fields_referencelink` (
 					`id` int(11) unsigned NOT NULL auto_increment,
 					`field_id` int(11) unsigned NOT NULL,
-					`related_field_id` int(11) unsigned default NULL,
+					`related_field_id` varchar(255) NOT NULL,
 					`limit` INT(4) UNSIGNED NOT NULL DEFAULT '20',
 					`field_type` enum('select','autocomplete') NOT NULL default 'select',
 					`allow_multiple_selection` enum('yes','no') NOT NULL default 'no',
