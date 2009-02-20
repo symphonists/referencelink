@@ -40,19 +40,19 @@
   color: white;
 }
 
-#selections {
+.selection-list {
   width: 100%;
   padding: 0;
   margin: .5em 0;
   list-style: none;
 }
 
-#selections li {
+.selection-list li {
   margin-top: -1px;
   padding: .5em;
   border: 1px solid #ddd;
 }
 
-#selections li a.deselect {
+.selection-list li a.deselect {
   margin-right: 2em;
 }

@@ -29,9 +29,9 @@ $(".replace").each(function(n) {
 	var inputHTML = "<em id='helptext'> (Type for suggestions)</em><input type='text' id='ac_search" + n + "' />";
 	var submitHTML = "<input type='hidden' name='" + $(".replace").attr("name") + "' id='ac_value" + n + "' value='" + getSelectedValues(selected[n]) + "' />";
 	
-	$(this).after("<ul id='selections" + n + "'></ul>");
+	$(this).after("<ul id='selections" + n + "' class='selection-list'></ul>");
 	if (selected[n].length > 0) {
-		buildSelectionList(selected[n]);
+		buildSelectionList(selected[n], n);
 	}
 
 	$(this).replaceWith(inputHTML + submitHTML);
@@ -56,7 +56,7 @@ $(".replace").each(function(n) {
 		$("#helptext").hide();
 	}
 	$("#ac_value" + n).val(getSelectedValues(selected[n]));
-	buildSelectionList(selected[n]);
+	buildSelectionList(selected[n], n);
 	$("#ac_search" + n).val("");
 	});
 	
@@ -74,7 +74,7 @@ $(".replace").each(function(n) {
 		return values;
 	}
 	
-	function buildSelectionList(sel) {
+	function buildSelectionList(sel, n) {
 		$("#selections" + n).empty();
 		for (i in sel) {
 			if (sel[i].id != undefined) {
@@ -93,7 +93,7 @@ $(".replace").each(function(n) {
 				}
 			}
 			$("#ac_value" + n).val(getSelectedValues(sel));
-			buildSelectionList(sel);
+			buildSelectionList(sel, n);
 		});
 	}
 
