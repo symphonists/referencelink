@@ -26,7 +26,7 @@ $(".replace").each(function(n) {
 		}
 	});
 	
-	var inputHTML = "<em id='helptext'> (Type for suggestions)</em> n=" + n + "<input type='text' id='ac_search" + n + "' />";
+	var inputHTML = "<em id='helptext'> (Type for suggestions)</em><input type='text' id='ac_search" + n + "' />";
 	var submitHTML = "<input type='hidden' name='" + $(".replace").attr("name") + "' id='ac_value" + 1 + "' value='" + getSelectedValues(selected[n]) + "' />";
 	
 	$(this).after("<ul id='selections" + n + "'></ul>");
