@@ -1,15 +1,15 @@
-$(document).ready(function(){
+jQuery(document).ready(function(){
 
 	var options = new Array();
 	var selected = new Array();
 	var multiple = new Array();
 
-$(".replace").each(function(n) {
-	multiple[n] = $(this).attr("multiple");
+jQuery(".replace").each(function(n) {
+	multiple[n] = jQuery(this).attr("multiple");
 
 	options[n] = new Array();
-	$(this).children("optgroup").children("option").each(function(i) {
-		options[n][i] = { name: $(this).text(), id: $(this).attr("value") };
+	jQuery(this).children("optgroup").children("option").each(function(i) {
+		options[n][i] = { name: jQuery(this).text(), id: jQuery(this).attr("value") };
 	});
 	for (x in options[n]) {
 		if (options[n][x].id == "none") {
@@ -18,29 +18,29 @@ $(".replace").each(function(n) {
 	}
 
 	selected[n] = new Array();
-	$(this).children("optgroup").children(":selected").each(function(i) {
-		if ($(this).val() != "none") {
-			if ($(this).html() != undefined && $(this).val() != "") {
-				selected[n][i] = { name: $(this).html(), id: $(this).val() };
+	jQuery(this).children("optgroup").children(":selected").each(function(i) {
+		if (jQuery(this).val() != "none") {
+			if (jQuery(this).html() != undefined && jQuery(this).val() != "") {
+				selected[n][i] = { name: jQuery(this).html(), id: jQuery(this).val() };
 			}
 		}
 	});
 	
 	var inputHTML = "<em id='helptext'> (Type for suggestions)</em><input type='text' id='ac_search" + n + "' />";
-	var submitHTML = "<input type='hidden' name='" + $(".replace").attr("name") + "' id='ac_value" + n + "' value='" + getSelectedValues(selected[n]) + "' />";
+	var submitHTML = "<input type='hidden' name='" + jQuery(".replace").attr("name") + "' id='ac_value" + n + "' value='" + getSelectedValues(selected[n]) + "' />";
 	
-	$(this).after("<ul id='selections" + n + "' class='selection-list'></ul>");
+	jQuery(this).after("<ul id='selections" + n + "' class='selection-list'></ul>");
 	if (selected[n].length > 0) {
 		buildSelectionList(selected[n], n);
 	}
 
-	$(this).replaceWith(inputHTML + submitHTML);
+	jQuery(this).replaceWith(inputHTML + submitHTML);
 	if (!multiple[n] && selected[n].length > 0) {
-		$("#ac_search" + n).hide();
-		$("#helptext").hide();
+		jQuery("#ac_search" + n).hide();
+		jQuery("#helptext").hide();
 	}
 
-	$("#ac_search" + n).autocomplete(options[n], {
+	jQuery("#ac_search" + n).autocomplete(options[n], {
 	multiple: true,
 	matchContains: true,
 	formatItem: function(row, i, max) {
@@ -52,12 +52,12 @@ $(".replace").each(function(n) {
 	}).result(function(event, data, formatted) {
 	selected[n].push({name: data.name, id: data.id});
 	if (!multiple[n] && selected[n].length > 0) {
-		$("#ac_search" + n).hide();
-		$("#helptext").hide();
+		jQuery("#ac_search" + n).hide();
+		jQuery("#helptext").hide();
 	}
-	$("#ac_value" + n).val(getSelectedValues(selected[n]));
+	jQuery("#ac_value" + n).val(getSelectedValues(selected[n]));
 	buildSelectionList(selected[n], n);
-	$("#ac_search" + n).val("");
+	jQuery("#ac_search" + n).val("");
 	});
 	
 });
@@ -75,24 +75,24 @@ $(".replace").each(function(n) {
 	}
 	
 	function buildSelectionList(sel, n) {
-		$("#selections" + n).empty();
+		jQuery("#selections" + n).empty();
 		for (i in sel) {
 			if (sel[i].id != undefined) {
-				$("#selections" + n).append("<li id='" + sel[i].id + "'><a href='#' id='" + sel[i].id + "' class='deselect' >Remove</a>" + sel[i].name  + "</li>")
+				jQuery("#selections" + n).append("<li id='" + sel[i].id + "'><a href='#' id='" + sel[i].id + "' class='deselect' >Remove</a>" + sel[i].name  + "</li>")
 			}
 		}
 		if (sel.length == 0) {
-			$("#ac_search" + n).show();
-			$("#helptext").show();
+			jQuery("#ac_search" + n).show();
+			jQuery("#helptext").show();
 		}
-		$("a.deselect").bind("click", sel, function(){
-			var did = $(this).attr("id");
+		jQuery("a.deselect").bind("click", sel, function(){
+			var did = jQuery(this).attr("id");
 			for (x in sel) {
 				if (sel[x].id == did) {
 					sel.splice(x,1)
 				}
 			}
-			$("#ac_value" + n).val(getSelectedValues(sel));
+			jQuery("#ac_value" + n).val(getSelectedValues(sel));
 			buildSelectionList(sel, n);
 		});
 	}
