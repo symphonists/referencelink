@@ -29,7 +29,7 @@
 			$assets_path = '/extensions/referencelink/assets/';
 			
 			// load autocomplete JS
-			$page->addScriptToHead(URL . $assets_path . 'referencelink.js', 230);
+			$page->addScriptToHead(URL . $assets_path . 'referencelink.js', 200);
 			
 			// load autocomplete styles
 			$page->addStylesheetToHead(URL . $assets_path . 'referencelink.css', 'screen', 100);
