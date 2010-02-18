@@ -5,8 +5,8 @@
 		public function about(){
 			return array(
 				'name' => 'Field: Reference Link',
-				'version' => '1.3',
-				'release-date' => '2010-01-08',
+				'version' => '1.3.1',
+				'release-date' => '2010-02-18',
 				'author' => array(
 					'name' => 'craig zheng',
 					'email' => 'cz@mongrl.com'
@@ -41,7 +41,7 @@
 
 		public function update($previousVersion){
 
-			if(version_compare($previousVersion, '1.3', '<')){
+			if(version_compare($previousVersion, '1.3.1', '<')){
 				try{
 					$fields = Symphony::Database()->fetchCol('field_id',
 						"SELECT `field_id` FROM `tbl_fields_referencelink`"
