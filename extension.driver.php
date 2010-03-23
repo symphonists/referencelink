@@ -5,8 +5,8 @@
 		public function about(){
 			return array(
 				'name' => 'Field: Reference Link',
-				'version' => '1.3.1',
-				'release-date' => '2010-02-18',
+				'version' => '1.3.2',
+				'release-date' => '2010-03-23',
 				'author' => array(
 					'name' => 'craig zheng',
 					'email' => 'cz@mongrl.com'
@@ -29,7 +29,7 @@
 			$assets_path = '/extensions/referencelink/assets/';
 
 			// load autocomplete JS
-			$page->addScriptToHead(URL . $assets_path . 'referencelink.js', 200);
+			$page->addScriptToHead(URL . $assets_path . 'referencelink.js', 900);
 
 			// load autocomplete styles
 			$page->addStylesheetToHead(URL . $assets_path . 'referencelink.css', 'screen', 100);
