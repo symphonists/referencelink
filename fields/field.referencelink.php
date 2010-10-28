@@ -121,12 +121,16 @@
 
 		public function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL) {
 
-			if(!is_array($data['relation_id'])){
-				$entry_ids = array($data['relation_id']);
-			}
+			$entry_ids = array();
 
-			else{
-				$entry_ids = array_values($data['relation_id']);
+			if(!is_null($data['relation_id'])){
+				if(!is_array($data['relation_id'])){
+					$entry_ids = array($data['relation_id']);
+				}
+				else{
+					$entry_ids = array_values($data['relation_id']);
+				}
+
 			}
 
 			// build list of target entries
@@ -137,7 +141,7 @@
 				$options[] = array(NULL, false, NULL);
 			}
 			if($this->get('required') == 'yes') {
-				$options[] = array('none', true, 'Choose one');
+				$options[] = array('none', empty($entry_ids), 'Choose one');
 			}
 
 			if(!empty($states)){
@@ -178,31 +182,50 @@
 		public function processRawFieldData($data, &$status, $simulate=false, $entry_id=NULL) {
 			$status = self::__OK__;
 
+			if(!is_array($data)) return array('relation_id' => $data);
+
+			if(empty($data)) return NULL;
+
+			$result = array();
+
 			if($this->get('field_type') == 'autocomplete') {
-				if($this->get('allow_multiple_selection') == 'yes') {
-					$list = $data[0];
-					$ids = explode(", ", $list);
+				if($this->get('allow_multiple_selection') == 'yes' && count($data) == 1 && strstr($data[0],',')) {
+					$ids = explode(', ', $data[0]);
 					foreach($ids as $id) {
 						if($id != '') {
 							$result['relation_id'][] = $id;
 						}
 					}
-					return $result;
 				}
 				else {
-					return array('relation_id' => $data);
+					foreach($data as $a => $value) {
+						$result['relation_id'][] = $data[$a];
+					}
 				}
 			}
 			else {
-				if(!is_array($data)) return array('relation_id' => $data);
-				if(empty($data)) return NULL;
-				$result = array();
 				foreach($data as $a => $value) {
 					$result['relation_id'][] = $data[$a];
 				}
-
-				return $result;
 			}
+			return $result;
+
+		}
+
+		public function checkPostFieldData($data, &$message, $entry_id=NULL){
+			$message = NULL;
+
+			if(is_array($data)){
+				$data = implode('', $data);
+			};
+
+			if ($this->get('required') == 'yes' && ($data == '' || $data == 'none' || is_null($data))){
+				$message = __("'%s' is a required field.", array($this->get('label')));
+
+				return self::__MISSING_FIELDS__;
+			}
+
+			return self::__OK__;
 		}
 
 	}

@@ -1,9 +1,9 @@
 Reference Link Field
 ------------------------------------
 
-Version: 1.3.2
-Author: craig zheng (cz@mongrl.com)
-Build Date: 23rd Mar 2010
+Version: 1.3.3
+Author: craig zheng
+Build Date: 28th Oct 2010
 Requirements: Symphony 2.0.5 or higher, Select Box Link 1.7 or higher
 
 An extension of Symphony's Select Box Link Field which adds the option to display the field as an autocomplete input field.
