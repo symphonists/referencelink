@@ -12,11 +12,24 @@
 	
 	
 	/*
-	 * EXTENSION: Reference Link
+	 * EXTENSION: Show/Hide Fields
 	 * Localisation strings
 	 */
 
 	$dictionary = array(
+		"Field Type" =>
+		"Feldtyp",
 		
+		"Autocomplete Input" =>
+		"Textfeld mit automatischer Vervollständigung",
+		
+		"(Type for suggestions)" =>
+		"(Vorschläge erscheinen automatisch)",
+		
+		"Remove" =>
+		"Entfernen",
+		
+		"Choose one" =>
+		"Bitte wählen...",
 
 	);
