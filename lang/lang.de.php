@@ -12,7 +12,7 @@
 	
 	
 	/*
-	 * EXTENSION: Show/Hide Fields
+	 * EXTENSION: Reference Link
 	 * Localisation strings
 	 */
 
