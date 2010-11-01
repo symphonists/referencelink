@@ -24,7 +24,7 @@
 
 			$div = new XMLElement('div', NULL, array('class' => 'group'));
 
-			$label = Widget::Label('Options');
+			$label = Widget::Label(__('Options'));
 
 			$sectionManager = new SectionManager($this->_engine);
 		  	$sections = $sectionManager->fetch(NULL, 'ASC', 'name');
@@ -55,8 +55,8 @@
 			$div->appendChild($label);
 
 			// set field type
-			$label = Widget::Label('Field Type');
-			$type_options = array(array('select', ($this->get('field_type') == 'select'), 'Select Box'), array('autocomplete', ($this->get('field_type') == 'autocomplete'), 'Autocomplete Input'));
+			$label = Widget::Label(__('Field Type'));
+			$type_options = array(array('select', ($this->get('field_type') == 'select'), __('Select Box')), array('autocomplete', ($this->get('field_type') == 'autocomplete'), __('Autocomplete Input')));
 			$label->appendChild(Widget::Select('fields[' . $this->get('sortorder') . '][field_type]', $type_options));
 			$div->appendChild($label);
 
@@ -64,7 +64,7 @@
 			$label = Widget::Label();
 			$input = Widget::Input('fields['.$this->get('sortorder').'][allow_multiple_selection]', 'yes', 'checkbox');
 			if($this->get('allow_multiple_selection') == 'yes') $input->setAttribute('checked', 'checked');
-			$label->setValue($input->generate() . ' Allow selection of multiple options');
+			$label->setValue($input->generate() . ' ' . __('Allow selection of multiple options'));
 			$div->appendChild($label);
 
 			if(isset($errors['related_field_id'])) $wrapper->appendChild(Widget::wrapFormElementWithError($div, $errors['related_field_id']));
@@ -74,7 +74,7 @@
 			$label = Widget::Label();
 			$input = Widget::Input('fields['.$this->get('sortorder').'][limit]', $this->get('limit'));
 			$input->setAttribute('size', '3');
-			$label->setValue('Limit to the ' . $input->generate() . ' most recent entries');
+			$label->setValue(__('Limit to the %s most recent entries',array($input->generate())));
 			$wrapper->appendChild($label);
 
 			$this->appendShowColumnCheckbox($wrapper);
@@ -141,7 +141,7 @@
 				$options[] = array(NULL, false, NULL);
 			}
 			if($this->get('required') == 'yes') {
-				$options[] = array('none', empty($entry_ids), 'Choose one');
+				$options[] = array('none', empty($entry_ids), __('Choose one'));
 			}
 
 			if(!empty($states)){
@@ -168,7 +168,7 @@
 			$html_attributes['id'] = $fieldname;
 
 			$label = Widget::Label($this->get('label'));
-			if($this->get('required') != 'yes') $label->appendChild(new XMLElement('i', 'Optional'));
+			if($this->get('required') != 'yes') $label->appendChild(new XMLElement('i', __('Optional')));
 			$label->appendChild(Widget::Select($fieldname, $options, $html_attributes));
 
 			if($flagWithError != NULL) {

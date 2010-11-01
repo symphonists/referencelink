@@ -1,3 +1,9 @@
+Symphony.Language.add({
+	"(Type for suggestions)": false,
+	"Remove": false
+});
+
+
 jQuery(document).ready(function(){
 
 	var options = new Array();
@@ -26,7 +32,7 @@ jQuery(".replace").each(function(n) {
 		}
 	});
 	
-	var inputHTML = "<em id='helptext'> (Type for suggestions)</em><input type='text' id='ac_search" + n + "' />";
+	var inputHTML = "<em id='helptext'> " + Symphony.Language.get("(Type for suggestions)") + "</em><input type='text' id='ac_search" + n + "' />";
 	var submitHTML = "<input type='hidden' name='" + jQuery(".replace").attr("name") + "' id='ac_value" + n + "' value='" + getSelectedValues(selected[n]) + "' />";
 	
 	jQuery(this).after("<ul id='selections" + n + "' class='selection-list'></ul>");
@@ -78,7 +84,7 @@ jQuery(".replace").each(function(n) {
 		jQuery("#selections" + n).empty();
 		for (i in sel) {
 			if (sel[i].id != undefined) {
-				jQuery("#selections" + n).append("<li id='" + sel[i].id + "'><a href='#' id='" + sel[i].id + "' class='deselect' >Remove</a>" + sel[i].name  + "</li>")
+				jQuery("#selections" + n).append("<li id='" + sel[i].id + "'><a href='#' id='" + sel[i].id + "' class='deselect' >" + Symphony.Language.get("Remove") + "</a>" + sel[i].name  + "</li>")
 			}
 		}
 		if (sel.length == 0) {
