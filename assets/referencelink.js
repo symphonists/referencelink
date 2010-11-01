@@ -32,7 +32,7 @@ jQuery(".replace").each(function(n) {
 		}
 	});
 	
-	var inputHTML = "<em id='helptext'> " + Symphony.Language.get("(Type for suggestions)") + "</em><input type='text' id='ac_search" + n + "' />";
+	var inputHTML = "<em id='helptext" + n + "'> " + Symphony.Language.get("(Type for suggestions)") + "</em><input type='text' id='ac_search" + n + "' />";
 	var submitHTML = "<input type='hidden' name='" + jQuery(".replace").attr("name") + "' id='ac_value" + n + "' value='" + getSelectedValues(selected[n]) + "' />";
 	
 	jQuery(this).after("<ul id='selections" + n + "' class='selection-list'></ul>");
@@ -43,7 +43,7 @@ jQuery(".replace").each(function(n) {
 	jQuery(this).replaceWith(inputHTML + submitHTML);
 	if (!multiple[n] && selected[n].length > 0) {
 		jQuery("#ac_search" + n).hide();
-		jQuery("#helptext").hide();
+		jQuery("#helptext" + n).hide();
 	}
 
 	jQuery("#ac_search" + n).autocomplete(options[n], {
@@ -59,7 +59,7 @@ jQuery(".replace").each(function(n) {
 	selected[n].push({name: data.name, id: data.id});
 	if (!multiple[n] && selected[n].length > 0) {
 		jQuery("#ac_search" + n).hide();
-		jQuery("#helptext").hide();
+		jQuery("#helptext" + n).hide();
 	}
 	jQuery("#ac_value" + n).val(getSelectedValues(selected[n]));
 	buildSelectionList(selected[n], n);
@@ -89,7 +89,7 @@ jQuery(".replace").each(function(n) {
 		}
 		if (sel.length == 0) {
 			jQuery("#ac_search" + n).show();
-			jQuery("#helptext").show();
+			jQuery("#helptext" + n).show();
 		}
 		jQuery("a.deselect").bind("click", sel, function(){
 			var did = jQuery(this).attr("id");
