@@ -182,7 +182,7 @@
 		public function processRawFieldData($data, &$status, $simulate=false, $entry_id=NULL) {
 			$status = self::__OK__;
 
-			if(!is_array($data)) return array('relation_id' => $data);
+			if(!is_array($data)) return array('relation_id' => substr_replace($data, '', strrpos($data, ', '), strlen($data)));
 
 			if(empty($data)) return NULL;
 
