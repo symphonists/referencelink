@@ -5,8 +5,8 @@
 		public function about(){
 			return array(
 				'name' => 'Field: Reference Link',
-				'version' => '1.3.4',
-				'release-date' => '2010-11-01',
+				'version' => '1.3.5',
+				'release-date' => '2010-11-03',
 				'author' => array(
 					'name' => 'craig zheng',
 					'email' => 'cz@mongrl.com'
