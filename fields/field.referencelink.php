@@ -182,7 +182,14 @@
 		public function processRawFieldData($data, &$status, $simulate=false, $entry_id=NULL) {
 			$status = self::__OK__;
 
-			if(!is_array($data)) return array('relation_id' => substr_replace($data, '', strrpos($data, ', '), strlen($data)));
+			if(!is_array($data)) {
+				if(strrpos($data, ', ') !== false && strrpos($data, ', ') == strlen($data)-2) { // broken comma
+					return array('relation_id' => substr_replace($data, '', strrpos($data, ', '), strlen($data)));
+				}
+				else { // clean value
+					return array('relation_id' => $data);
+				}
+			} 
 
 			if(empty($data)) return NULL;
 
