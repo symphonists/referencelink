@@ -1,4 +1,4 @@
-.ac_results {
+.reflink_results {
   padding: 0px;
   border: 1px solid #999;
   background-color: white;
@@ -6,7 +6,7 @@
   z-index: 99999;
 }
 
-.ac_results ul {
+.reflink_results ul {
   width: 100%;
   list-style-position: outside;
   list-style: none;
@@ -17,7 +17,7 @@
   color: #343434;
 }
 
-.ac_results li {
+.reflink_results li {
   margin: 0px;
   padding: 5px;
   cursor: default;
@@ -27,32 +27,32 @@
   border-bottom: 1px solid #ddd;
 }
 
-.ac_loading {
+.reflink_loading {
   background: white url('loading.gif') right center no-repeat;
 }
 
-.ac_odd {
+.reflink_odd {
   background-color: #f2f2f2;
 }
 
-.ac_over {
+.reflink_over {
   background-color: #5273C0;
   color: white;
 }
 
-.selection-list {
+.reflink_list {
   width: 100%;
   padding: 0;
   margin: .5em 0;
   list-style: none;
 }
 
-.selection-list li {
+.reflink_list li {
   margin-top: -1px;
   padding: .5em;
   border: 1px solid #ddd;
 }
 
-.selection-list li a.deselect {
+.reflink_list li a.deselect {
   margin-right: 2em;
 }

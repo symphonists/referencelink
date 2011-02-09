@@ -3,18 +3,25 @@
     require_once(EXTENSIONS . "/selectbox_link_field/fields/field.selectbox_link.php");
 	if(!defined('__IN_SYMPHONY__')) die('<h2>Symphony Error</h2><p>You cannot directly access this file</p>');
 
-	Class fieldReferenceLink extends fieldSelectBox_Link{
+	Class fieldReferenceLink extends fieldSelectBox_Link {
 
 	// FIELD DEFINITION
 
-		public function __construct(&$parent){
+		public function __construct(&$parent) {
 			parent::__construct($parent);
 			$this->_name = 'Reference Link';
 		}
 
-		public function findDefaults(&$fields){
-			if(!isset($fields['allow_multiple_selection'])) $fields['allow_multiple_selection'] = 'no';
-			if(!isset($fields['field_type'])) $fields['field_type'] = 'select';
+		public function findDefaults(&$fields) {
+			if(!isset($fields['allow_multiple_selection'])) {
+				$fields['allow_multiple_selection'] = 'no';
+			}
+			if(!isset($fields['field_type'])) {
+				$fields['field_type'] = 'select';
+			}
+			if(!isset($fields['show_association'])) {
+				$fields['show_association'] = 'yes';
+			}
 		}
 
 	// FIELD SETUP & CREATION
@@ -24,14 +31,16 @@
 
 			$div = new XMLElement('div', NULL, array('class' => 'group'));
 
-			$label = Widget::Label(__('Options'));
+			$label = Widget::Label(__('Values'));
 
 			$sectionManager = new SectionManager($this->_engine);
 		  	$sections = $sectionManager->fetch(NULL, 'ASC', 'name');
 			$field_groups = array();
 
 			if(is_array($sections) && !empty($sections)){
-				foreach($sections as $section) $field_groups[$section->get('id')] = array('fields' => $section->fetchFields(), 'section' => $section);
+				foreach($sections as $section) {
+					$field_groups[$section->get('id')] = array('fields' => $section->fetchFields(), 'section' => $section);
+				}
 			}
 
 			$options = array();
@@ -41,6 +50,7 @@
 				if(!is_array($group['fields'])) continue;
 
 				$fields = array();
+				
 				foreach($group['fields'] as $f){
 					if($f->get('id') != $this->get('id') && $f->canPrePopulate() && !is_null($this->get('related_field_id'))){
 						$fields[] = array($f->get('id'), in_array($f->get('id'), $this->get('related_field_id')), $f->get('label'));
@@ -60,13 +70,6 @@
 			$label->appendChild(Widget::Select('fields[' . $this->get('sortorder') . '][field_type]', $type_options));
 			$div->appendChild($label);
 
-			// Allow selection of multiple items
-			$label = Widget::Label();
-			$input = Widget::Input('fields['.$this->get('sortorder').'][allow_multiple_selection]', 'yes', 'checkbox');
-			if($this->get('allow_multiple_selection') == 'yes') $input->setAttribute('checked', 'checked');
-			$label->setValue($input->generate() . ' ' . __('Allow selection of multiple options'));
-			$div->appendChild($label);
-
 			if(isset($errors['related_field_id'])) $wrapper->appendChild(Widget::wrapFormElementWithError($div, $errors['related_field_id']));
 			else $wrapper->appendChild($div);
 
@@ -76,9 +79,21 @@
 			$input->setAttribute('size', '3');
 			$label->setValue(__('Limit to the %s most recent entries',array($input->generate())));
 			$wrapper->appendChild($label);
-
-			$this->appendShowColumnCheckbox($wrapper);
-			$this->appendRequiredCheckbox($wrapper);
+			
+			// Allow selection of multiple items
+			$label = Widget::Label();
+			$input = Widget::Input('fields['.$this->get('sortorder').'][allow_multiple_selection]', 'yes', 'checkbox');
+			if($this->get('allow_multiple_selection') == 'yes') {
+				$input->setAttribute('checked', 'checked');
+			}
+			$label->setValue($input->generate() . ' ' . __('Allow selection of multiple options'));
+			
+			$div = new XMLElement('div', NULL, array('class' => 'compact'));
+			$div->appendChild($label);
+			$this->appendShowAssociationCheckbox($div);
+			$this->appendRequiredCheckbox($div);
+			$this->appendShowColumnCheckbox($div);
+			$wrapper->appendChild($div);
 		}
 
 		public function commit(){
@@ -163,12 +178,14 @@
 				$html_attributes['multiple'] = 'multiple';
 			}
 			if($this->get('field_type') == 'autocomplete') {
-				$html_attributes['class'] = 'replace';
+				$html_attributes['class'] = 'reflink_replace';
 			}
 			$html_attributes['id'] = $fieldname;
 
 			$label = Widget::Label($this->get('label'));
-			if($this->get('required') != 'yes') $label->appendChild(new XMLElement('i', __('Optional')));
+			if($this->get('required') != 'yes') {
+				$label->appendChild(new XMLElement('i', __('Optional')));
+			}
 			$label->appendChild(Widget::Select($fieldname, $options, $html_attributes));
 
 			if($flagWithError != NULL) {

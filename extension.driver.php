@@ -4,13 +4,14 @@
 
 		public function about(){
 			return array(
-				'name' => 'Field: Reference Link',
-				'version' => '1.3.6',
-				'release-date' => '2010-11-04',
-				'author' => array(
-					'name' => 'craig zheng',
-					'email' => 'cz@mongrl.com'
-				)
+				'name'			=> 'Field: Reference Link',
+				'version'		=> '1.3.7',
+				'release-date'	=> '2011-02-09',
+				'author'		=> array(
+					'name'			=> 'craig zheng',
+					'email'			=> 'craig@symphony-cms.com'
+				),
+				'description'	=> 'Autocomplete-enabled version of Select Box Link.'
 			);
 		}
 
@@ -29,14 +30,14 @@
 			$assets_path = '/extensions/referencelink/assets/';
 
 			// load autocomplete JS
-			$page->addScriptToHead(URL . $assets_path . 'referencelink.js', 900);
+			$page->addScriptToHead(URL . $assets_path . 'referencelink.publish.js', 900);
 
 			// load autocomplete styles
-			$page->addStylesheetToHead(URL . $assets_path . 'referencelink.css', 'screen', 100);
+			$page->addStylesheetToHead(URL . $assets_path . 'referencelink.publish.css', 'screen', 100);
 		}
 
 		public function uninstall(){
-			$this->_Parent->Database->query("DROP TABLE `tbl_fields_referencelink`");
+			Symphony::Database()->query("DROP TABLE `tbl_fields_referencelink`");
 		}
 
 		public function update($previousVersion){
@@ -71,13 +72,11 @@
 				Symphony::Database()->query("ALTER TABLE `tbl_fields_referencelink` CHANGE `related_field_id` `related_field_id` VARCHAR(255) NOT NULL");
 			}
 
-
-
 			return true;
 		}
 
 		public function install(){
-			return $this->_Parent->Database->query(
+			return Symphony::Database()->query(
 				"CREATE TABLE `tbl_fields_referencelink` (
 					`id` int(11) unsigned NOT NULL auto_increment,
 					`field_id` int(11) unsigned NOT NULL,
