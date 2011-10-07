@@ -1,8 +1,8 @@
 # Reference Link Field
 
-- Version: 1.3.7
+- Version: 1.4
 - Author: craig zheng
-- Build Date: 9th Feb 2011
+- Build Date: 10th Oct 2011
 - Requirements: Symphony 2.2, Select Box Link 1.19
 
 ## Overview
@@ -23,4 +23,5 @@ An extension of Symphony's Select Box Link Field which adds the option to displa
 
 ## Changelog
 
+- **1.4** Asynchronous autocomplete options w/ no limits
 - **1.3.7** JS/CSS cleanup and namespacing; 2.2 compatibility

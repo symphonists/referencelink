@@ -77,7 +77,7 @@
 			$label = Widget::Label();
 			$input = Widget::Input('fields['.$this->get('sortorder').'][limit]', $this->get('limit'));
 			$input->setAttribute('size', '3');
-			$label->setValue(__('Limit to the %s most recent entries',array($input->generate())));
+			$label->setValue(__('Limit to the %s most recent entries (Select Box only)',array($input->generate())));
 			$wrapper->appendChild($label);
 			
 			// Allow selection of multiple items
@@ -111,6 +111,7 @@
 			}
 
 			$fields['allow_multiple_selection'] = ($this->get('allow_multiple_selection') ? $this->get('allow_multiple_selection') : 'no');
+			$fields['show_association'] = $this->get('show_association') == 'yes' ? 'yes' : 'no';
 			$fields['limit'] = max(1, (int)$this->get('limit'));
 			$fields['field_type'] = ($this->get('field_type') ? $this->get('field_type') : 'select');
 			// save/replace field instance
@@ -125,7 +126,12 @@
 
 			if(!is_null($this->get('related_field_id'))){
 				foreach($this->get('related_field_id') as $field_id){
-					$this->createSectionAssociation(NULL, $id, $field_id);
+					$this->createSectionAssociation(
+						NULL,
+						$id,
+						$field_id,
+						$this->get('show_association') == 'yes' ? true : false
+					);
 				}
 			}
 
@@ -145,48 +151,104 @@
 				else{
 					$entry_ids = array_values($data['relation_id']);
 				}
-
 			}
 
-			// build list of target entries
-			$states = $this->findOptions($entry_ids);
-			$options = array();
-
-			if($this->get('required') != 'yes') {
-				$options[] = array(NULL, false, NULL);
-			}
-			if($this->get('required') == 'yes') {
-				$options[] = array('none', empty($entry_ids), __('Choose one'));
-			}
-
-			if(!empty($states)){
-				foreach($states as $s){
-					$group = array('label' => $s['name'], 'options' => array());
-					foreach($s['values'] as $id => $v){
-						$group['options'][] = array($id, in_array($id, $entry_ids), General::sanitize($v));
-					}
-					$options[] = $group;
-				}
-			}
-
-			// build label and input html
+			// build label and fieldname
+			$label = Widget::Label($this->get('label'));
 			$fieldname = 'fields' . $fieldnamePrefix . '[' . $this->get('element_name') . ']' . $fieldnamePostfix;
 			if($this->get('allow_multiple_selection') == 'yes') $fieldname .= '[]';
 
-			$html_attributes = array();
-			if($this->get('allow_multiple_selection') == 'yes') {
-				$html_attributes['multiple'] = 'multiple';
-			}
-			if($this->get('field_type') == 'autocomplete') {
-				$html_attributes['class'] = 'reflink_replace';
-			}
-			$html_attributes['id'] = $fieldname;
+			// build list of target entries
+			$states = $this->findOptions($entry_ids);
 
-			$label = Widget::Label($this->get('label'));
-			if($this->get('required') != 'yes') {
-				$label->appendChild(new XMLElement('i', __('Optional')));
+			// If this is an autocomplete, add text inputs
+			if($this->get('field_type') == 'autocomplete') {
+
+				$entries_list = array();
+				foreach($states as $s) {
+					foreach($s['values'] as $i => $v) {
+						// Reverse the key/value so we can do an easy array_intersect below
+						$entries_list[$v] = $i;
+					}
+				}
+
+				$selected_list = array_intersect($entries_list, $entry_ids);
+
+				$em = new XMLElement('em', __('(Type for suggestions)'));
+				$label->appendChild($em);
+
+				$label->appendChild(Widget::Input(
+					'search' . $this->get('id'),
+					null,
+					'text',
+					array(
+						'id'		=> 'reflink_search' . $this->get('id'),
+						'class' 	=> 'reflink_search',
+						'multi' 	=> $this->get('allow_multiple_selection'),
+						'fields' 	=> implode(',', $this->get('related_field_id'))
+					)
+				));
+				$label->appendChild(Widget::Input(
+					$fieldname,
+					null,
+					'hidden',
+					array(
+						'id'	=> 'reflink_input' . $this->get('id'),
+						'class' => 'reflink_input',
+						'value' => implode(',', $entry_ids)
+					)
+				));
+
+				$ul = new XMLElement('ul', null, array(
+					'id' => 'reflink_selections' . $this->get('id'),
+					'class' => 'reflink_list'
+				));
+				foreach($selected_list as $name => $id){
+					$li = new XMLElement('li', $name, array('id' => $id, 'class' => $name));
+					$a = Widget::Anchor(__('Remove'), '#', __('Remove'), 'deselect', $id);
+					$li->appendChild($a);
+					$ul->appendChild($li);
+				}
+				$label->appendChild($ul);
 			}
-			$label->appendChild(Widget::Select($fieldname, $options, $html_attributes));
+			// Otherwise, add the select box
+			else {
+
+				$options = array();
+
+				if($this->get('allow_multiple_selection') != 'yes') {
+					if($this->get('required') == 'yes') {
+						$options[] = array('none', empty($entry_ids), __('Choose one'));
+					}
+
+					if($this->get('required') == 'no') {
+						$options[] = array(NULL, false, __('None'));
+					}
+				}
+
+				if(!empty($states)){
+					foreach($states as $s){
+						$group = array('label' => $s['name'], 'options' => array());
+						foreach($s['values'] as $id => $v){
+							$group['options'][] = array($id, in_array($id, $entry_ids), General::sanitize($v));
+						}
+						$options[] = $group;
+					}
+				}
+
+				$html_attributes = array();
+				if($this->get('allow_multiple_selection') == 'yes') {
+					$html_attributes['multiple'] = 'multiple';
+				}
+				$html_attributes['id'] = $fieldname;
+
+				
+				if($this->get('required') != 'yes') {
+					$label->appendChild(new XMLElement('i', __('Optional')));
+				}
+				$label->appendChild(Widget::Select($fieldname, $options, $html_attributes));
+
+			}
 
 			if($flagWithError != NULL) {
 				$wrapper->appendChild(Widget::wrapFormElementWithError($label, $flagWithError));

@@ -1,13 +1,9 @@
-.reflink_results {
-  padding: 0px;
+ul.ui-autocomplete {
+  width: 1px;
   border: 1px solid #999;
   background-color: white;
   overflow: hidden;
   z-index: 99999;
-}
-
-.reflink_results ul {
-  width: 100%;
   list-style-position: outside;
   list-style: none;
   padding: 0;
@@ -17,7 +13,7 @@
   color: #343434;
 }
 
-.reflink_results li {
+.ui-autocomplete li {
   margin: 0px;
   padding: 5px;
   cursor: default;
@@ -25,19 +21,6 @@
   line-height: 2.15;
   overflow: hidden;
   border-bottom: 1px solid #ddd;
-}
-
-.reflink_loading {
-  background: white url('loading.gif') right center no-repeat;
-}
-
-.reflink_odd {
-  background-color: #f2f2f2;
-}
-
-.reflink_over {
-  background-color: #5273C0;
-  color: white;
 }
 
 .reflink_list {
@@ -54,5 +37,6 @@
 }
 
 .reflink_list li a.deselect {
-  margin-right: 2em;
+  float: right;
+  margin-left: 2em;
 }

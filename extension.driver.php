@@ -5,8 +5,8 @@
 		public function about(){
 			return array(
 				'name'			=> 'Field: Reference Link',
-				'version'		=> '1.3.7',
-				'release-date'	=> '2011-02-09',
+				'version'		=> '1.4',
+				'release-date'	=> '2011-10-10',
 				'author'		=> array(
 					'name'			=> 'craig zheng',
 					'email'			=> 'craig@symphony-cms.com'
@@ -41,6 +41,22 @@
 		}
 
 		public function update($previousVersion){
+
+			if(version_compare($previousVersion, '1.4', '<')){
+				try{
+					Symphony::Database()->query("
+						ALTER TABLE
+							`tbl_fields_referencelink`
+						ADD COLUMN
+							`show_association` enum('yes','no')
+						NOT NULL
+							default 'yes'
+					");
+				}
+				catch(Exception $e){
+					// Discard
+				}
+			}
 
 			if(version_compare($previousVersion, '1.3.1', '<')){
 				try{
@@ -84,6 +100,7 @@
 					`limit` INT(4) UNSIGNED NOT NULL DEFAULT '20',
 					`field_type` enum('select','autocomplete') NOT NULL default 'select',
 					`allow_multiple_selection` enum('yes','no') NOT NULL default 'no',
+					`show_association` enum('yes','no') NOT NULL default 'yes',
 					PRIMARY KEY (`id`),
 					KEY `field_id` (`field_id`)
 				) TYPE=MyISAM;"
