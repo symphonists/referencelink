@@ -1,9 +1,19 @@
+.reflink_search {
+  /* Used by jQuery UI to calculate ui-autocomplete z-index. This tricks
+  jQuery.Position to use out z-index instead of returning 0. Needed to ensure
+  autocomplete list overrides other fields, Stage in particular. */
+  position: relative;
+  z-index: 2000;
+}
+
 ul.ui-autocomplete {
   width: 1px;
+  max-height: 170px; /* 5 results */
+  overflow-x: hidden;
+  overflow-y: auto;
   border: 1px solid #999;
   background-color: white;
-  overflow: hidden;
-  z-index: 99999;
+  position: absolute;
   list-style-position: outside;
   list-style: none;
   padding: 0;
@@ -13,7 +23,7 @@ ul.ui-autocomplete {
   color: #343434;
 }
 
-.ui-autocomplete li {
+ul.ui-autocomplete li {
   margin: 0px;
   padding: 5px;
   cursor: default;
