@@ -13,9 +13,10 @@ var ReferenceLink = {
 		var self = this;
 
 		jQuery(".reflink_search").each(function(n) {
-
 			// Get reflink field ID
-			var i = jQuery(this).closest('div.field-referencelink').attr('id').replace('field-', '');
+			var i = jQuery(this).closest('div.field-referencelink').attr('id').replace('field-', ''),
+				cache = {},
+				lastXhr;
 
 			// Get target field IDs
 			self.fields[i] = jQuery(this).attr('fields');
@@ -45,13 +46,31 @@ var ReferenceLink = {
 			jQuery(this)
 				// don't navigate away from the field on tab when selecting an item
 				.bind( "keydown", function( event ) {
-					if ( event.keyCode === jQuery.ui.keyCode.TAB &&
-							jQuery( this ).data( "autocomplete" ).menu.active ) {
+					if (event.keyCode === jQuery.ui.keyCode.TAB &&
+							jQuery(this).data("autocomplete").menu.active ) {
 						event.preventDefault();
 					}
 				})
 				.autocomplete({
-					source: Symphony.WEBSITE + "/symphony/extension/referencelink/autocomplete/?field-id=" + self.fields[i],
+					source: function(request, response) {
+						var term = request.term;
+
+						if(term in cache) {
+							response(cache[term]);
+							return;
+						}
+
+						lastXhr = jQuery.getJSON(
+							Symphony.WEBSITE + "/symphony/extension/referencelink/autocomplete/?field-id=" + self.fields[i],
+							request,
+							function(data, status, xhr) {
+								cache[term] = data;
+								if(xhr === lastXhr) {
+									response(data);
+								}
+							}
+						);
+					},
 					appendTo: jQuery(this).closest('div.field-referencelink'),
 					minLength: 2,
 					open: function(event, ui) {
