@@ -4,19 +4,20 @@ Symphony.Language.add({
 });
 
 var ReferenceLink = {
-	
+
 	selected: new Array(),
 	multiple: new Array(),
 	fields: new Array(),
-	
+
 	init: function() {
 		var self = this;
-		
-		jQuery(".reflink_search").each(function(n) {
 
+		jQuery(".reflink_search").each(function(n) {
 			// Get reflink field ID
-			var i = jQuery(this).parents('div.field-referencelink').attr('id').replace('field-', '');
-			
+			var i = jQuery(this).closest('div.field-referencelink').attr('id').replace('field-', ''),
+				cache = {},
+				lastXhr;
+
 			// Get target field IDs
 			self.fields[i] = jQuery(this).attr('fields');
 
@@ -42,31 +43,69 @@ var ReferenceLink = {
 				jQuery("#reflink_search" + i).hide();
 			}
 
-			jQuery(this).autocomplete({
-				source: Symphony.WEBSITE + "/symphony/extension/referencelink/autocomplete?field-id=" + self.fields[i],
-				select: function(event, ui) { 
-
-					// Clear the input
-					jQuery("#reflink_search" + i).val("");
-
-					// Add the selected item to the selection list
-					self.selected[i].push({name: ui.item.label, id: ui.item.id});
-
-					// If we've reached the limit, hide the input field
-					if (!self.multiple[i] && self.selected[i].length > 0) {
-						jQuery("#reflink_search" + i).hide();
+			jQuery(this)
+				// don't navigate away from the field on tab when selecting an item
+				.bind( "keydown", function( event ) {
+					if (event.keyCode === jQuery.ui.keyCode.TAB &&
+							jQuery(this).data("autocomplete").menu.active ) {
+						event.preventDefault();
 					}
+				})
+				.autocomplete({
+					source: function(request, response) {
+						var term = request.term;
 
-					// Update the actual submittable input
-					jQuery("#reflink_input" + i).val(self.getSelectedValues(self.selected[i]));
+						if(term in cache) {
+							response(cache[term]);
+							return;
+						}
 
-					// Rebuild the selection list
-					self.buildSelectionList(self.selected[i], i);
+						lastXhr = jQuery.getJSON(
+							Symphony.WEBSITE + "/symphony/extension/referencelink/autocomplete/?field-id=" + self.fields[i],
+							request,
+							function(data, status, xhr) {
+								cache[term] = data;
+								if(xhr === lastXhr) {
+									response(data);
+								}
+							}
+						);
+					},
+					appendTo: jQuery(this).closest('div.field-referencelink'),
+					minLength: 2,
+					open: function(event, ui) {
+						/* Used by jQuery UI to calculate ui-autocomplete z-index. This tricks
+						jQuery.Position to use out z-index instead of returning 0. Needed to ensure
+						autocomplete list overrides other fields, Stage in particular. We can't apply
+						this in the CSS as it will cause the Symphony menu */
+						jQuery(this).css('z-index', 2000);
+					},
+					select: function(event, ui) {
 
-				}
-			}
-			);
-	
+						// Clear the input
+						jQuery("#reflink_search" + i).val("");
+
+						// Add the selected item to the selection list
+						self.selected[i].push({name: ui.item.label, id: ui.item.id});
+
+						// If we've reached the limit, hide the input field
+						if (!self.multiple[i] && self.selected[i].length > 0) {
+							jQuery("#reflink_search" + i).hide();
+						}
+
+						// Update the actual submittable input
+						jQuery("#reflink_input" + i).val(self.getSelectedValues(self.selected[i]));
+
+						// Rebuild the selection list
+						self.buildSelectionList(self.selected[i], i);
+
+						return false;
+					},
+					close: function(event, ui) {
+						jQuery(this).css('z-index', 2);
+					}
+				});
+
 		});
 	},
 
@@ -77,19 +116,19 @@ var ReferenceLink = {
 		var values = "";
 		for (i in sel) {
 			if (sel[i].id != undefined) {
-				values += sel[i].id + ", ";						
+				values += sel[i].id + ", ";
 			}
 		}
 		return values;
 	},
-	
+
 	/*
 	 * Builds the visible HTML list of selections
 	 */
 	buildSelectionList: function(sel, n) {
-		
+
 		var self = this;
-		
+
 		// Clear the list
 		jQuery("#reflink_selections" + n).empty();
 
@@ -121,6 +160,8 @@ var ReferenceLink = {
 
 			// Rebuild the selection list
 			self.buildSelectionList(sel, n);
+
+			return false;
 		});
 	}
 }

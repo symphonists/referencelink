@@ -1,9 +1,16 @@
+.reflink_search {
+  position: relative;
+  z-index: 2;
+}
+
 ul.ui-autocomplete {
   width: 1px;
+  max-height: 170px; /* 5 results */
+  overflow-x: hidden;
+  overflow-y: auto;
   border: 1px solid #999;
   background-color: white;
-  overflow: hidden;
-  z-index: 99999;
+  position: absolute;
   list-style-position: outside;
   list-style: none;
   padding: 0;
@@ -13,7 +20,7 @@ ul.ui-autocomplete {
   color: #343434;
 }
 
-.ui-autocomplete li {
+ul.ui-autocomplete li {
   margin: 0px;
   padding: 5px;
   cursor: default;
