@@ -4,19 +4,19 @@ Symphony.Language.add({
 });
 
 var ReferenceLink = {
-	
+
 	selected: new Array(),
 	multiple: new Array(),
 	fields: new Array(),
-	
+
 	init: function() {
 		var self = this;
-		
+
 		jQuery(".reflink_search").each(function(n) {
 
 			// Get reflink field ID
 			var i = jQuery(this).closest('div.field-referencelink').attr('id').replace('field-', '');
-			
+
 			// Get target field IDs
 			self.fields[i] = jQuery(this).attr('fields');
 
@@ -54,6 +54,13 @@ var ReferenceLink = {
 					source: Symphony.WEBSITE + "/symphony/extension/referencelink/autocomplete/?field-id=" + self.fields[i],
 					appendTo: jQuery(this).closest('div.field-referencelink'),
 					minLength: 2,
+					open: function(event, ui) {
+						/* Used by jQuery UI to calculate ui-autocomplete z-index. This tricks
+						jQuery.Position to use out z-index instead of returning 0. Needed to ensure
+						autocomplete list overrides other fields, Stage in particular. We can't apply
+						this in the CSS as it will cause the Symphony menu */
+						jQuery(this).css('z-index', 2000);
+					},
 					select: function(event, ui) {
 
 						// Clear the input
@@ -74,9 +81,12 @@ var ReferenceLink = {
 						self.buildSelectionList(self.selected[i], i);
 
 						return false;
+					},
+					close: function(event, ui) {
+						jQuery(this).css('z-index', 2);
 					}
 				});
-	
+
 		});
 	},
 
@@ -87,19 +97,19 @@ var ReferenceLink = {
 		var values = "";
 		for (i in sel) {
 			if (sel[i].id != undefined) {
-				values += sel[i].id + ", ";						
+				values += sel[i].id + ", ";
 			}
 		}
 		return values;
 	},
-	
+
 	/*
 	 * Builds the visible HTML list of selections
 	 */
 	buildSelectionList: function(sel, n) {
-		
+
 		var self = this;
-		
+
 		// Clear the list
 		jQuery("#reflink_selections" + n).empty();
 
