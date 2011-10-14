@@ -23,5 +23,5 @@ An extension of Symphony's Select Box Link Field which adds the option to displa
 
 ## Changelog
 
-- **1.4** Asynchronous autocomplete options w/ no limits
+- **1.4** Asynchronous autocomplete options w/ no limits (hat tip to [brendo](https://github.com/brendo))
 - **1.3.7** JS/CSS cleanup and namespacing; 2.2 compatibility
