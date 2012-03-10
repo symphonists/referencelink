@@ -7,8 +7,8 @@
 
 	// FIELD DEFINITION
 
-		public function __construct(&$parent) {
-			parent::__construct($parent);
+		public function __construct() {
+			parent::__construct();
 			$this->_name = 'Reference Link';
 		}
 
@@ -29,12 +29,11 @@
 		public function displaySettingsPanel(&$wrapper, $errors=NULL){
 			Field::displaySettingsPanel($wrapper, $errors);
 
-			$div = new XMLElement('div', NULL, array('class' => 'group'));
+			$div = new XMLElement('div', NULL, array('class' => 'two columns'));
 
-			$label = Widget::Label(__('Values'));
+			$label = Widget::Label(__('Values'), null, 'column');
 
-			$sectionManager = new SectionManager($this->_engine);
-		  	$sections = $sectionManager->fetch(NULL, 'ASC', 'name');
+		  	$sections = SectionManager::fetch(NULL, 'ASC', 'name');
 			$field_groups = array();
 
 			if(is_array($sections) && !empty($sections)){
@@ -65,7 +64,7 @@
 			$div->appendChild($label);
 
 			// set field type
-			$label = Widget::Label(__('Field Type'));
+			$label = Widget::Label(__('Field Type'), null, 'column');
 			$type_options = array(array('select', ($this->get('field_type') == 'select'), __('Select Box')), array('autocomplete', ($this->get('field_type') == 'autocomplete'), __('Autocomplete Input')));
 			$label->appendChild(Widget::Select('fields[' . $this->get('sortorder') . '][field_type]', $type_options));
 			$div->appendChild($label);
@@ -75,7 +74,7 @@
 
 			## Maximum entries
 			$label = Widget::Label();
-			$input = Widget::Input('fields['.$this->get('sortorder').'][limit]', $this->get('limit'));
+			$input = Widget::Input('fields['.$this->get('sortorder').'][limit]', (string) $this->get('limit'));
 			$input->setAttribute('size', '3');
 			$label->setValue(__('Limit to the %s most recent entries (Select Box only)',array($input->generate())));
 			$wrapper->appendChild($label);
@@ -115,9 +114,9 @@
 			$fields['limit'] = max(1, (int)$this->get('limit'));
 			$fields['field_type'] = ($this->get('field_type') ? $this->get('field_type') : 'select');
 			// save/replace field instance
-			$this->Database->query("DELETE FROM `tbl_fields_" . $this->handle() . "` WHERE `field_id` = '$id'");
+			Symphony::Database()->query("DELETE FROM `tbl_fields_" . $this->handle() . "` WHERE `field_id` = '$id'");
 
-			if(!$this->Database->insert($fields, 'tbl_fields_' . $this->handle())) {
+			if(!Symphony::Database()->insert($fields, 'tbl_fields_' . $this->handle())) {
 				return false;
 			}
 
@@ -205,7 +204,7 @@
 				));
 				foreach($selected_list as $name => $id){
 					$li = new XMLElement('li', $name, array('id' => $id, 'class' => $name));
-					$a = Widget::Anchor(__('Remove'), '#', __('Remove'), 'deselect', $id);
+					$a = Widget::Anchor(__('Remove'), '#', __('Remove'), 'deselect', (string)$id);
 					$li->appendChild($a);
 					$ul->appendChild($li);
 				}

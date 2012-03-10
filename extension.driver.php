@@ -2,19 +2,6 @@
 
 	Class extension_referencelink extends Extension{
 
-		public function about(){
-			return array(
-				'name'			=> 'Field: Reference Link',
-				'version'		=> '1.4',
-				'release-date'	=> '2011-10-10',
-				'author'		=> array(
-					'name'			=> 'craig zheng',
-					'email'			=> 'craig@symphony-cms.com'
-				),
-				'description'	=> 'Autocomplete-enabled version of Select Box Link.'
-			);
-		}
-
 		public function getSubscribedDelegates() {
 			return array(
 				array(
@@ -26,14 +13,12 @@
 		}
 
 		public function initializeAdmin($context) {
-			$page = $context['parent']->Page;
+			$page = Administration::instance()->Page;
 			$assets_path = '/extensions/referencelink/assets/';
-
-			// load autocomplete JS
-			$page->addScriptToHead(URL . $assets_path . 'referencelink.publish.js', 900);
-
-			// load autocomplete styles
-			$page->addStylesheetToHead(URL . $assets_path . 'referencelink.publish.css', 'screen', 100);
+			if($page instanceof contentPublish) {
+				$page->addScriptToHead(URL . $assets_path . 'referencelink.publish.js', 900);
+				$page->addStylesheetToHead(URL . $assets_path . 'referencelink.publish.css', 'screen', 100);
+			}
 		}
 
 		public function uninstall(){
@@ -103,7 +88,7 @@
 					`show_association` enum('yes','no') NOT NULL default 'yes',
 					PRIMARY KEY (`id`),
 					KEY `field_id` (`field_id`)
-				) TYPE=MyISAM;"
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
 			);
 		}
 
