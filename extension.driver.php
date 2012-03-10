@@ -26,14 +26,18 @@
 		}
 
 		public function initializeAdmin($context) {
-			$page = $context['parent']->Page;
-			$assets_path = '/extensions/referencelink/assets/';
+			if(class_exists('Administration')
+				&& Administration::instance() instanceof Administration
+				&& Administration::instance()->Page instanceof HTMLPage
+			) {
+				$callback = Administration::instance()->getPageCallback();
 
-			// load autocomplete JS
-			$page->addScriptToHead(URL . $assets_path . 'referencelink.publish.js', 900);
-
-			// load autocomplete styles
-			$page->addStylesheetToHead(URL . $assets_path . 'referencelink.publish.css', 'screen', 100);
+				// Let the jQuery magic flow 
+				if($context['oPage'] instanceof contentPublish) {
+					Administration::instance()->Page->addStylesheetToHead(URL . $assets_path . 'referencelink.publish.js', 900);
+					Administration::instance()->Page->addScriptToHead(URL . $assets_path . 'referencelink.publish.css', 'screen', 100);
+				}
+			}
 		}
 
 		public function uninstall(){

@@ -7,8 +7,8 @@
 
 	// FIELD DEFINITION
 
-		public function __construct(&$parent) {
-			parent::__construct($parent);
+		public function __construct() {
+			parent::__construct();
 			$this->_name = 'Reference Link';
 		}
 
@@ -75,7 +75,7 @@
 
 			## Maximum entries
 			$label = Widget::Label();
-			$input = Widget::Input('fields['.$this->get('sortorder').'][limit]', $this->get('limit'));
+			$input = Widget::Input('fields['.$this->get('sortorder').'][limit]', (string) $this->get('limit'));
 			$input->setAttribute('size', '3');
 			$label->setValue(__('Limit to the %s most recent entries (Select Box only)',array($input->generate())));
 			$wrapper->appendChild($label);
