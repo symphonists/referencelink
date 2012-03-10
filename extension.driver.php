@@ -26,17 +26,11 @@
 		}
 
 		public function initializeAdmin($context) {
-			if(class_exists('Administration')
-				&& Administration::instance() instanceof Administration
-				&& Administration::instance()->Page instanceof HTMLPage
-			) {
-				$callback = Administration::instance()->getPageCallback();
-
-				// Let the jQuery magic flow 
-				if($context['oPage'] instanceof contentPublish) {
-					Administration::instance()->Page->addStylesheetToHead(URL . $assets_path . 'referencelink.publish.js', 900);
-					Administration::instance()->Page->addScriptToHead(URL . $assets_path . 'referencelink.publish.css', 'screen', 100);
-				}
+			$page = Administration::instance()->Page;
+			$assets_path = '/extensions/referencelink/assets/';
+			if($page instanceof contentPublish) {
+				$page->addScriptToHead(URL . $assets_path . 'referencelink.publish.js', 900);
+				$page->addStylesheetToHead(URL . $assets_path . 'referencelink.publish.css', 'screen', 100);
 			}
 		}
 

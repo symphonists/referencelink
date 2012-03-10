@@ -115,9 +115,9 @@
 			$fields['limit'] = max(1, (int)$this->get('limit'));
 			$fields['field_type'] = ($this->get('field_type') ? $this->get('field_type') : 'select');
 			// save/replace field instance
-			$this->Database->query("DELETE FROM `tbl_fields_" . $this->handle() . "` WHERE `field_id` = '$id'");
+			Symphony::Database()->query("DELETE FROM `tbl_fields_" . $this->handle() . "` WHERE `field_id` = '$id'");
 
-			if(!$this->Database->insert($fields, 'tbl_fields_' . $this->handle())) {
+			if(!Symphony::Database()->insert($fields, 'tbl_fields_' . $this->handle())) {
 				return false;
 			}
 
@@ -205,7 +205,7 @@
 				));
 				foreach($selected_list as $name => $id){
 					$li = new XMLElement('li', $name, array('id' => $id, 'class' => $name));
-					$a = Widget::Anchor(__('Remove'), '#', __('Remove'), 'deselect', $id);
+					$a = Widget::Anchor(__('Remove'), '#', __('Remove'), 'deselect', (string)$id);
 					$li->appendChild($a);
 					$ul->appendChild($li);
 				}

@@ -9,16 +9,13 @@
 
 		public function view(){
 			require_once(TOOLKIT . '/class.entrymanager.php');
-			$entryManager = new EntryManager(Symphony::Engine());
-			$fieldManager = $entryManager->fieldManager;
-			$sectionManager = $entryManager->sectionManager;
 
 			if(!isset($_GET['term'])) {
 				$this->_Result = json_encode(array('status' => __('No results')));
 				return;
 			}
 			else {
-				$query = General::sanitize(urldecode($_GET['term']));
+				$query = array(General::sanitize(urldecode($_GET['term'])));
 				if(empty($query)) {
 					$this->_Result = json_encode(array('status' => __('No results')));
 					return;
@@ -34,7 +31,7 @@
 				$results = array();
 
 				foreach($field_ids as $field_id) {
-					$field = $fieldManager->fetch($field_id);
+					$field = FieldManager::fetch($field_id);
 					$section_id = $field->get('parent_section');
 
 					$joins = $where = '';
@@ -45,7 +42,7 @@
 					$where = str_replace("')", "%'", $where);
 
 					// Fetch entries
-					$entries = $entryManager->fetch(null, $section_id, 10, 0, $where, $joins, false, true, array($field->get('element_name')));
+					$entries = EntryManager::fetch(null, $section_id, 10, 0, $where, $joins, false, true, array($field->get('element_name')));
 
 					foreach($entries as $entry) {
 						$results[] = array(
