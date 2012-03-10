@@ -2,19 +2,6 @@
 
 	Class extension_referencelink extends Extension{
 
-		public function about(){
-			return array(
-				'name'			=> 'Field: Reference Link',
-				'version'		=> '1.4',
-				'release-date'	=> '2011-10-10',
-				'author'		=> array(
-					'name'			=> 'craig zheng',
-					'email'			=> 'craig@symphony-cms.com'
-				),
-				'description'	=> 'Autocomplete-enabled version of Select Box Link.'
-			);
-		}
-
 		public function getSubscribedDelegates() {
 			return array(
 				array(
@@ -101,7 +88,7 @@
 					`show_association` enum('yes','no') NOT NULL default 'yes',
 					PRIMARY KEY (`id`),
 					KEY `field_id` (`field_id`)
-				) TYPE=MyISAM;"
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
 			);
 		}
 
