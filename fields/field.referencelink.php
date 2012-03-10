@@ -29,12 +29,11 @@
 		public function displaySettingsPanel(&$wrapper, $errors=NULL){
 			Field::displaySettingsPanel($wrapper, $errors);
 
-			$div = new XMLElement('div', NULL, array('class' => 'group'));
+			$div = new XMLElement('div', NULL, array('class' => 'two columns'));
 
-			$label = Widget::Label(__('Values'));
+			$label = Widget::Label(__('Values'), null, 'column');
 
-			$sectionManager = new SectionManager($this->_engine);
-		  	$sections = $sectionManager->fetch(NULL, 'ASC', 'name');
+		  	$sections = SectionManager::fetch(NULL, 'ASC', 'name');
 			$field_groups = array();
 
 			if(is_array($sections) && !empty($sections)){
@@ -65,7 +64,7 @@
 			$div->appendChild($label);
 
 			// set field type
-			$label = Widget::Label(__('Field Type'));
+			$label = Widget::Label(__('Field Type'), null, 'column');
 			$type_options = array(array('select', ($this->get('field_type') == 'select'), __('Select Box')), array('autocomplete', ($this->get('field_type') == 'autocomplete'), __('Autocomplete Input')));
 			$label->appendChild(Widget::Select('fields[' . $this->get('sortorder') . '][field_type]', $type_options));
 			$div->appendChild($label);
