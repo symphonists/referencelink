@@ -2,19 +2,6 @@
 
 	Class extension_referencelink extends Extension{
 
-		public function about(){
-			return array(
-				'name'			=> 'Field: Reference Link',
-				'version'		=> '1.3.7',
-				'release-date'	=> '2011-02-09',
-				'author'		=> array(
-					'name'			=> 'craig zheng',
-					'email'			=> 'craig@symphony-cms.com'
-				),
-				'description'	=> 'Autocomplete-enabled version of Select Box Link.'
-			);
-		}
-
 		public function getSubscribedDelegates() {
 			return array(
 				array(
@@ -26,21 +13,44 @@
 		}
 
 		public function initializeAdmin($context) {
-			$page = $context['parent']->Page;
+			$page = Administration::instance()->Page;
 			$assets_path = '/extensions/referencelink/assets/';
 
-			// load autocomplete JS
-			$page->addScriptToHead(URL . $assets_path . 'referencelink.publish.js', 900);
+			if($page instanceof contentPublish) {
+				$page->addScriptToHead(URL . $assets_path . 'referencelink.publish.js', 900);
+				$page->addStylesheetToHead(URL . $assets_path . 'referencelink.publish.css', 'screen', 100);
+			}
+		}
 
-			// load autocomplete styles
-			$page->addStylesheetToHead(URL . $assets_path . 'referencelink.publish.css', 'screen', 100);
+		public function install(){
+			return Symphony::Database()->query("
+				CREATE TABLE `tbl_fields_referencelink` (
+					`id` int(11) unsigned NOT NULL auto_increment,
+					`field_id` int(11) unsigned NOT NULL,
+					`related_field_id` varchar(255) NOT NULL,
+					`limit` INT(4) UNSIGNED NOT NULL DEFAULT '20',
+					`field_type` enum('select','autocomplete') NOT NULL default 'select',
+					`allow_multiple_selection` enum('yes','no') NOT NULL default 'no',
+					`show_association` enum('yes','no') NOT NULL default 'yes',
+					PRIMARY KEY (`id`),
+					KEY `field_id` (`field_id`)
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+			");
 		}
 
 		public function uninstall(){
-			Symphony::Database()->query("DROP TABLE `tbl_fields_referencelink`");
+			return Symphony::Database()->query("DROP TABLE `tbl_fields_referencelink`");
 		}
 
 		public function update($previousVersion){
+			if(version_compare($previousVersion, '1.4', '<')){
+				try{
+					Symphony::Database()->query("ALTER TABLE `tbl_fields_referencelink` ADD COLUMN `show_association` enum('yes','no') NOT NULL default 'yes'");
+				}
+				catch(Exception $e){
+					// Discard
+				}
+			}
 
 			if(version_compare($previousVersion, '1.3.1', '<')){
 				try{
@@ -73,21 +83,6 @@
 			}
 
 			return true;
-		}
-
-		public function install(){
-			return Symphony::Database()->query(
-				"CREATE TABLE `tbl_fields_referencelink` (
-					`id` int(11) unsigned NOT NULL auto_increment,
-					`field_id` int(11) unsigned NOT NULL,
-					`related_field_id` varchar(255) NOT NULL,
-					`limit` INT(4) UNSIGNED NOT NULL DEFAULT '20',
-					`field_type` enum('select','autocomplete') NOT NULL default 'select',
-					`allow_multiple_selection` enum('yes','no') NOT NULL default 'no',
-					PRIMARY KEY (`id`),
-					KEY `field_id` (`field_id`)
-				) TYPE=MyISAM;"
-			);
 		}
 
 	}

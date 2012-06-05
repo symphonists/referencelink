@@ -4,23 +4,22 @@ Symphony.Language.add({
 });
 
 var ReferenceLink = {
-	
 	options: new Array(),
 	selected: new Array(),
 	multiple: new Array(),
-	
+
 	init: function() {
 		var self = this;
-		
+
 		jQuery(".reflink_replace").each(function(n) {
 			self.multiple[n] = jQuery(this).attr("multiple");
 
 			self.options[n] = new Array();
-			
+
 			jQuery(this).children("optgroup").children("option").each(function(i) {
 				self.options[n][i] = { name: jQuery(this).text(), id: jQuery(this).attr("value") };
 			});
-			
+
 			for (x in self.options[n]) {
 				if (self.options[n][x].id == "none") {
 					self.options[n].splice(x,1)
@@ -35,10 +34,10 @@ var ReferenceLink = {
 					}
 				}
 			});
-	
+
 			var inputHTML = "<em id='reflink_helptext" + n + "'> " + Symphony.Language.get("(Type for suggestions)") + "</em><input type='text' id='reflink_search" + n + "' />";
 			var submitHTML = "<input type='hidden' name='" + jQuery(this).attr("name") + "' id='reflink_value" + n + "' value='" + self.getSelectedValues(self.selected[n]) + "' />";
-	
+
 			jQuery(this).after("<ul id='reflink_selections" + n + "' class='reflink_list'></ul>");
 			if (self.selected[n].length > 0) {
 				self.buildSelectionList(self.selected[n], n);
@@ -69,24 +68,24 @@ var ReferenceLink = {
 				self.buildSelectionList(self.selected[n], n);
 				jQuery("#reflink_search" + n).val("");
 			});
-	
+
 		});
 	},
-	
+
 	getSelectedValues: function(sel) {
 		var values = "";
 		for (i in sel) {
 			if (sel[i].id != undefined) {
-				values += sel[i].id + ", ";						
+				values += sel[i].id + ", ";
 			}
 		}
 		return values;
 	},
-	
+
 	buildSelectionList: function(sel, n) {
-		
+
 		var self = this;
-		
+
 		jQuery("#reflink_selections" + n).empty();
 		for (i in sel) {
 			if (sel[i].id != undefined) {
