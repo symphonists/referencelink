@@ -125,7 +125,7 @@
 			if(!FieldManager::saveSettings($id, $fields)) { return false; }
 
 			// build associations
-			$this->removeSectionAssociation($id);
+			SectionManager::removeSectionAssociation($id);
 			foreach($this->get('related_field_id') as $field_id){
 				$this->createSectionAssociation(NULL, $id, $field_id, $this->get('show_association') == 'yes' ? true : false);
 			}
