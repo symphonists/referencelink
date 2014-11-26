@@ -1,6 +1,6 @@
 # Reference Link Field
 
-- Version: 1.4.1
+- Version: 1.5
 - Author: craig zheng
 - Build Date: 5th June 2012
 - Requirements: Symphony 2.5.2, Select Box Link 1.23
