@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension id="referencelink" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
+<extension id="referencelink" status="deprecated" xmlns="http://symphony-cms.com/schemas/extension/1.0">
 	<name>Field: Reference Link</name>
 	<description>Autocomplete select box links</description>
 	<repo type="github">https://github.com/czheng/referencelink</repo>
